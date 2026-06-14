@@ -1,0 +1,80 @@
+As implementações devem ser feitas em Python 3. Assuma que os códigos serão executados em uma
+máquina com interpretador Python 3.12, com Miniconda, Pip, numba, numpy, pandas). Caso precise
+instalar bibliotecas adicionais, descreva-as no seu Readme.md
+
+Jogo da velha invertido está no pacote tttm (abreviatura
+para tic-tac-toe misere).
+O gamestate.py contém uma classe GameState, cujos objetos armazenam o tabuleiro no
+atributo board e o jogador a fazer a jogada no atributo player (um caractere, B para as pretas ou
+W para as brancas. Isso vale para ambos os jogos (jogo da velha invertido também é jogado com
+‘pretas’ ou ‘brancas’ ao invés dos clássicos ‘X’ e ‘O’). As funções de gamestate.py permitem
+consultar a lista de ações válidas, obter a lista de sucessores de um estado, consultar se o estado é
+terminal e quem venceu o jogo.
+O board.py contém a classe Board, cujos objetos contém a representação interna do jogo. Ela
+somente será útil para calcular avaliações heurísticas na qual você precisará examinar o estado
+internamente.
+
+1. Jogo da velha invertido
+O tamanho do tabuleiro e as jogadas válidas são da mesma forma que na versão original, porém, no
+invertido você PERDE ao alinhar 3 peças em um grid 3x3. Este é um jogo pequeno: o fator de
+ramificação começa em 9 e diminui em 1 a cada turno. A profundidade máxima da árvore do jogo é
+9.
+
+A seguir temos uma descrição mais detalhada do tttm/board.py. O tabuleiro é representado
+como uma matriz de caracteres (ou lista de strings ;). W representa uma peça branca (white), B uma
+peça preta (black) e . (ponto) representa um espaço livre. No exemplo a seguir, temos a representação
+de um estado de vitória das pretas (brancas alinharam 3 peças na diagonal).
+[
+“..W”,
+“BWB”,
+“WB.”
+]
+Em nosso sistema de coordenadas, eixo x cresce da esquerda para a direita e o eixo y cresce de cima
+para baixo. O exemplo a seguir mostra o sistema de coordenadas para aquele mesmo estado acima.
+012 - > eixo x
+0 ..W
+1 BWB
+2 WB.
+|
+v
+eixo y
+Uma jogada é dada por uma tupla com as coordenadas x, y (coluna, linha) da peça a ser colocada, de
+acordo com o sistema de coordenadas acima.
+2. O algoritmo
+Você deverá implementar o minimax com poda alfa-beta. Opcionalmente, você pode implementar
+também o MCTS como extra. Os algoritmos devem ser implementados para ambos os jogos. Todas
+as implementações consistem em preencher as funções especificadas em determinados arquivos do
+kit.
+2.1. Minimax com poda alfa-beta
+Você deve implementar a poda alfa-beta na função minimax_move do arquivo minimax.py. A
+função recebe o estado do jogo, a profundidade máxima (-1 pra profundidade ilimitada) e uma função
+de avaliação (que você implementará em um momento posterior. Ela deve executar a poda alfa-beta
+até a profundidade máxima e chamar a função de avaliação quando encontrar um estado terminal ou
+nos estados na profundidade máxima.
+Sua implementação da poda alfa-beta deve ser independente do jogo (ambos os jogos usam a mesma
+interface para consultar as jogadas e gerar os sucessores). A única parte que depende do jogo
+específico é a função de avaliação de estados, a qual é implementada em outro arquivo, conforme a
+seguir. Todas as funções de avaliação recebem o estado a ser avaliado e o jogador cujo ponto de vista
+deve ser considerado. Esse jogador deve ser o mesmo do estado raiz da árvore de busca, já que a
+decisão será feita para ele.
+
+2.1.1. Jogo da velha invertido
+
+Para o jogo da velha invertido, preencha a função utility do arquivo tttm_minimax.py com
+a função de avaliação. Assuma que ela avaliará estados terminais do jogo. Por fim, a função que
+retornará uma jogada para o servidor de jogos é a make_move. Ela receberá um estado e executará
+a poda alfa-beta sem limite de profundidade, passando sua função utility para avaliação dos
+estados. O jogo é pequeno e é esperado que seja possível atingir a profundidade máxima. Quando
+testada, sua função deve retornar uma jogada com o tempo limite de 1 minuto.
+
+2.2. Avaliação
+a) Para o Tic-Tac-Toe misere, relate se o desempenho da sua implementação do minimax com poda
+alfa-beta. Embora não seja simples provar que o jogo está sendo jogado com perfeição, avalie as
+evidências:
+(i) O minimax sempre ganha ou empata jogando contra o randomplayer?
+(ii) O minimax sempre empata consigo mesmo?
+(iii) O minimax não perde para você quando você usa a sua melhor estratégia?
+
+IMPORTANTE: cuidado com o sistema de coordenadas vs a indexação de matrizes. Sua função
+make_move deve retornar as coordenadas x, y (coluna, linha) enquanto a representação de matriz
+endereça primeiramente a linha e depois a coluna.
