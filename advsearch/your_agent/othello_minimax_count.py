@@ -10,6 +10,8 @@ from .minimax import minimax_move
 # Nao esqueca de renomear 'your_agent' com o nome
 # do seu agente.
 
+MAX_DEPTH = 5
+
 
 def make_move(state) -> Tuple[int, int]:
     """
@@ -18,12 +20,17 @@ def make_move(state) -> Tuple[int, int]:
     :return: (int, int) tuple with x, y coordinates of the move (remember: 0 is the first row/column)
     """
 
-    # o codigo abaixo apenas retorna um movimento aleatorio valido para
-    # a primeira jogada 
-    # Remova-o e coloque uma chamada para o minimax_move (que vc implementara' no modulo minimax).
-    # A chamada a minimax_move deve receber sua funcao evaluate como parametro.
+    legal_moves = list(state.legal_moves())
+    if not legal_moves:
+        # No legal moves available for this player in a non-terminal state should not happen,
+        # but we keep a fallback for safety.
+        raise ValueError('No legal moves available')
 
-    return random.choice([(2, 3), (4, 5), (5, 4), (3, 2)])
+    best_move = minimax_move(state, MAX_DEPTH, evaluate_count)
+    if best_move is None:
+        return random.choice(legal_moves)
+
+    return best_move
 
 
 def evaluate_count(state, player:str) -> float:
@@ -34,4 +41,11 @@ def evaluate_count(state, player:str) -> float:
     :param state: state to evaluate (instance of GameState)
     :param player: player to evaluate the state for (B or W)
     """
-    return 0   # substitua pelo seu codigo
+    opponent = Board.opponent(player)
+    player_count = state.board.num_pieces(player)
+    opponent_count = state.board.num_pieces(opponent)
+
+    if state.is_terminal():
+        return float(player_count - opponent_count)
+
+    return float(player_count - opponent_count)
