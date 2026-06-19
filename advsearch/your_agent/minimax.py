@@ -14,29 +14,62 @@ def alphabeta(state, depth, alpha, beta, maximizing, root_player, max_depth, eva
     :param eval_func: função de avaliação para estados terminais/folha
     :return: valor de utilidade do estado
     """
-    if state.is_terminal():
+
+    # 
+    if state.is_terminal() or (max_depth != -1 and depth >= max_depth):
         return eval_func(state, root_player)
 
-    if max_depth != -1 and depth >= max_depth:
-        return eval_func(state, root_player) 
+    legal_moves = state.legal_moves()
+
+    if not legal_moves:
+        # If the state is terminal or we've reached max depth, evaluate it.
+        if state.is_terminal() or (max_depth != -1 and depth >= max_depth):
+            return eval_func(state, root_player)
+
+        # Otherwise this is a "pass" situation in games like Othello:
+        # the player has no legal moves but the game is not over —
+        # pass the turn to the opponent and continue search.
+        try:
+            opponent = state.board.opponent(state.player)
+        except Exception:
+            # If we cannot determine opponent, fall back to evaluating.
+            return eval_func(state, root_player)
+
+        # If opponent has moves, create a pass state and recurse.
+        if state.board.has_legal_move(opponent):
+            pass_state = state.copy()
+            pass_state.player = opponent
+            return alphabeta(pass_state, depth + 1, alpha, beta, not maximizing, root_player, max_depth, eval_func)
+
+        # Neither player has legal moves -> terminal
+        return eval_func(state, root_player)
 
     if maximizing:
         value = float('-inf')
-        for move in state.legal_moves():
+        for move in legal_moves:
             child = state.next_state(move)
-            value = max(value, alphabeta(child, depth + 1, alpha, beta, False, root_player, max_depth, eval_func))
+            
+            next_maximizing = maximizing if child.player == state.player else not maximizing
+            
+            res = alphabeta(child, depth + 1, alpha, beta, next_maximizing, root_player, max_depth, eval_func)
+            value = max(value, res)
             alpha = max(alpha, value)
             if alpha >= beta:
                 break
         return value
     else:
         value = float('inf')
-        for move in state.legal_moves():
+        for move in legal_moves:
             child = state.next_state(move)
-            value = min(value, alphabeta(child, depth + 1, alpha, beta, True, root_player, max_depth, eval_func))
+            
+            next_maximizing = maximizing if child.player == state.player else not maximizing
+            
+            res = alphabeta(child, depth + 1, alpha, beta, next_maximizing, root_player, max_depth, eval_func)
+            value = min(value, res)
             beta = min(beta, value)
             if alpha >= beta:
                 break
+
         return value
 
 def minimax_move(state, max_depth: int, eval_func: Callable) -> Tuple[int, int]:
@@ -51,6 +84,10 @@ def minimax_move(state, max_depth: int, eval_func: Callable) -> Tuple[int, int]:
     """
     # The player for whom we are calculating the move
     root_player = state.player 
+    legal_moves = list(state.legal_moves())
+
+    if not legal_moves:
+        return None
 
     # Find the best move
     best_move = None
@@ -59,12 +96,19 @@ def minimax_move(state, max_depth: int, eval_func: Callable) -> Tuple[int, int]:
     beta = float('inf')
 
     # Shuffle legal moves to add some variability in case of ties
-    for move in state.legal_moves():
+    random.shuffle(legal_moves)
+
+    for move in legal_moves:
         child = state.next_state(move)
-        value = alphabeta(child, 0, alpha, beta, False, root_player, max_depth, eval_func)
+        
+        next_maximizing = True if child.player == root_player else False
+        
+        value = alphabeta(child, 1, alpha, beta, next_maximizing, root_player, max_depth, eval_func)
+        
         if value > best_value:
             best_value = value
             best_move = move
+        
         alpha = max(alpha, best_value)
 
     return best_move
