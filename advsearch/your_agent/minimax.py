@@ -1,5 +1,19 @@
-import random
-from typing import Tuple, Callable
+from typing import Tuple, Callable, List
+from ..othello.board import Board
+
+def order_moves(state, moves, root_player, reverse=True):
+    try:
+        opp = Board.opponent(root_player)
+        scored = []
+        for move in moves:
+            child = state.next_state(move)
+            val = child.board.num_pieces(root_player) - child.board.num_pieces(opp)
+            scored.append((val, move))
+        scored.sort(key=lambda x: x[0], reverse=reverse)
+        return [m for _, m in scored]
+    except AttributeError:
+        return list(moves)
+
 
 def alphabeta(state, depth, alpha, beta, maximizing, root_player, max_depth, eval_func):
     """
@@ -45,6 +59,7 @@ def alphabeta(state, depth, alpha, beta, maximizing, root_player, max_depth, eva
         return eval_func(state, root_player)
 
     if maximizing:
+        legal_moves = order_moves(state, list(legal_moves), root_player, reverse=True)
         value = float('-inf')
         for move in legal_moves:
             child = state.next_state(move)
@@ -58,6 +73,7 @@ def alphabeta(state, depth, alpha, beta, maximizing, root_player, max_depth, eva
                 break
         return value
     else:
+        legal_moves = order_moves(state, list(legal_moves), root_player, reverse=False)
         value = float('inf')
         for move in legal_moves:
             child = state.next_state(move)
@@ -95,8 +111,8 @@ def minimax_move(state, max_depth: int, eval_func: Callable) -> Tuple[int, int]:
     alpha = float('-inf')
     beta = float('inf')
 
-    # Shuffle legal moves to add some variability in case of ties
-    random.shuffle(legal_moves)
+    # Order moves: best first for max node = descending from root_player's view
+    legal_moves = order_moves(state, legal_moves, root_player, reverse=True)
 
     for move in legal_moves:
         child = state.next_state(move)
