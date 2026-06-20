@@ -29,7 +29,6 @@ def alphabeta(state, depth, alpha, beta, maximizing, root_player, max_depth, eva
     :return: valor de utilidade do estado
     """
 
-    # 
     if state.is_terminal() or (max_depth != -1 and depth >= max_depth):
         return eval_func(state, root_player)
 
