@@ -10,7 +10,7 @@ from .minimax import minimax_move
 # Nao esqueca de renomear 'your_agent' com o nome
 # do seu agente.
 
-MAX_DEPTH = 5
+MAX_DEPTH = 4
 
 
 def make_move(state) -> Tuple[int, int]:

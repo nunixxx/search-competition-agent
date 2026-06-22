@@ -5,7 +5,7 @@ from ..othello.board import Board
 from .minimax import minimax_move
 from .othello_minimax_mask import EVAL_TEMPLATE
 
-MAX_DEPTH = 5
+MAX_DEPTH = 4
 
 def make_move(state) -> Tuple[int, int]:
     legal_moves = list(state.legal_moves())

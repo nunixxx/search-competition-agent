@@ -24,7 +24,7 @@ EVAL_TEMPLATE = [
     [100, -30, 6, 2, 2, 6, -30, 100]
 ]
 
-MAX_DEPTH = 5
+MAX_DEPTH = 4
 
 
 def make_move(state) -> Tuple[int, int]:
