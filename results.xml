@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<othello-match>
+	<timing start="Mon Jun 22 15:29:55 2026" finish="Mon Jun 22 15:29:55 2026"/>
+	<player directory="advsearch\randomplayer" color="B" result="loss" score="-1"/>
+	<player directory="advsearch\agenteTentou" color="W" result="win" score="1"/>
+	<moves>
+		<move coord="1,0" color="B"/>
+		<move coord="0,1" color="W"/>
+		<move coord="0,0" color="B"/>
+		<move coord="1,2" color="W"/>
+		<move coord="2,2" color="B"/>
+		<move coord="2,0" color="W"/>
+		<move coord="1,1" color="B"/>
+	</moves>
+</othello-match>
