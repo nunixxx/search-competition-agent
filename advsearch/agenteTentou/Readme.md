@@ -1,6 +1,6 @@
 # Relatório
 
-## Integrantes
+## Integrantes TURMA B
 
 | Aluno   | Nome                                      | Cartão UFRGS            |
 | ------- | ----------------------------------------- | ----------------------- |
