@@ -6,7 +6,7 @@
 | ------- | ----------------------------------------- | ----------------------- |
 | Aluno 1 | <mark>`Caio Felipe Ferreira Nunes`</mark> | <mark>`00588024`</mark> |
 | Aluno 2 | <mark>`Renan Augusto da Silva Zen`</mark> | <mark>`00579490`</mark> |
-| Aluno 3 | <mark>` `</mark>                          | <mark>` `</mark>        |
+| Aluno 3 | <mark>`Guilherme Hilgert Feroleto`</mark> | <mark>`00587076`</mark> |
 
 ---
 
