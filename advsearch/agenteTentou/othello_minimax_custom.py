@@ -42,8 +42,13 @@ def evaluate_custom(state, player: str) -> float:
             elif piece == opponent:
                 mask_score -= EVAL_TEMPLATE[y][x]
 
-    player_mobility = len(state.board.legal_moves(player))
-    oponent_mobility = len(state.board.legal_moves(opponent))
+    p_state = state.copy()
+    p_state.player = player
+    player_mobility = len(p_state.legal_moves())
+
+    o_state = state.copy()
+    o_state.player = opponent
+    oponent_mobility = len(o_state.legal_moves())
     mobility = player_mobility - oponent_mobility
 
     player_frontier = 0

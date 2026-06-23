@@ -6,9 +6,9 @@
 
 * **Aluno 1 – Cartão UFRGS:** <mark>`00588024`</mark>
 
-* **Aluno 2 – Nome:** <mark>` `</mark>
+* **Aluno 2 – Nome:** <mark>`Renan Augusto da Silva Zen`</mark>
 
-* **Aluno 2 – Cartão UFRGS:** <mark>` `</mark>
+* **Aluno 2 – Cartão UFRGS:** <mark>`00579490`</mark>
 
 * **Aluno 3 – Nome:** <mark>` `</mark>
 
@@ -68,3 +68,50 @@ Durante os testes realizados, foram jogadas aproximadamente **20 partidas** cont
 Até compreendermos uma estratégia eficiente, o minimax venceu **8 partidas**, enquanto as outras **12 terminaram em empate**.
 
 Como discutido anteriormente, o Tic-Tac-Toe é um *solved game*. Portanto, considerando jogo perfeito por parte do minimax, o pior resultado possível para ele é o empate, impossibilitando derrotá-lo utilizando apenas estratégia ótima.
+
+# Othello 
+# Heurística Customizada
+    A heurística implementada em evaluate_custom no arquivo othello_minimax_custom.py realiza uma combinação linear de quatro métricas fundamentais do Othello, ajustando o peso de cada uma de acordo com o andamento do jogo (se está início, meio ou fim, controlados pela variável n_empty). As quatro métricas são:
+    Valor Posicional (Mask Score): Utiliza a matriz estática (EVAL_TEMPLATE) para valorizar posições fortes (como bordas) e penalizar posições perigosas (como as adjacentes aos cantos).
+    Mobilidade (Mobility): Calcula a diferença entre o número de jogadas legais do jogador e do oponente. Maximizar opções restringe o adversário e o força a fazer jogadas piores.
+    Fronteira (Frontier): Avalia quantas peças estão adjacentes a espaços vazios. Ter menos peças de fronteira que o adversário é melhor, pois peças "internas" são mais difíceis de serem capturadas.
+    Cantos (Corner Score): Prioridade máxima no jogo, cantos são as posições definitivas e imunes à captura. 
+    A ideia de utilizar essas métricas veio a partir de uma pesquisa sobre a literatura existente sobre o jogo e um pouco de intuição depois de jogar algumas partidas.
+    A estratégia ajusta dinamicamente os multiplicadores de cada métrica. No início de jogo, a ideia é dar mais importância no valor posicional e no controle de bordas. No meio do jogo, a mobilidade e os cantos ganham um peso maior. No fim de jogo, a mobilidade recebe o maior peso, focando em estrangular as opções finais do oponente.
+
+
+### (i) Contagem de peças X Valor posicional
+
+Vencedor: Valor posicional | Peças B 19 x 45 Peças W
+
+### (ii) Valor posicional X Contagem de peças
+
+Vencedor: Contagem de peças | Peças B 28 x 36 Peças W
+
+### (iii) Contagem de peças X Heurística customizada
+
+Vencedor: Heurística customizada | Peças B 12 x 52 Peças W
+
+### (iv) Heurística customizada X Contagem de peças
+
+Vencedor: Heurística customizada | Peças B 48 x 16 Peças W
+
+### (v) Valor posicional X Heurística customizada
+
+Vencedor: Heurística customizada | Peças B 22 x 42 Peças W
+
+### (vi) Heurística customizada X Valor posicional
+
+Vencedor: Heurística customizada | Peças B 48 x 16 Peças W
+
+Logo, a Heurística customizada foi a mais bem-sucedida de todas, obtendo vitória sobre todos os adversários.
+
+# Critério de Parada
+    O critério de parada principal para a árvore de busca sem limite de profundidade (quando max_depth = -1) é o Aprofundamento Iterativo (Iterative Deepening) controlado por tempo limite. A função inicia com profundidade 1 e vai iterativamente aumentando a profundidade máxima da árvore (current_depth += 1). A cada jogada avaliada, o algoritmo verifica o tempo gasto através de time.time(). Se a diferença atingir o teto predefinido de 4.5 segundos (seguro para o limite de 5s imposto pelo servidor), o loop é imediatamente interrompido e a melhor jogada encontrada na profundidade completa anterior é retornada.
+
+# Agente do torneio
+    Para o agente oficial do torneio (tournament_agent.py), escolhemos uma implementação baseada no Minimax com Poda Alfa-Beta, realizando Aprofundamento Iterativo contínuo, alimentado pela Heurística Customizada. Para otimizar o desempenho nos segundos finais, o agente possui uma verificação de fim de jogo mais agressiva: quando restam 12 ou menos espaços vazios no tabuleiro (n_empty <= 12), o algoritmo sabe que está perto do estado terminal e adapta seu comportamento para fechar a partida da forma mais eficiente possível.
+
+
+# Uso de IA
+    Usei o Gemini para me dar um repertório teórico do que a literatura diz sobre heurísticas e adaptei para incluir minhas percepções do jogo. Além disso, usamos para ajudar a debugar alguns poucos erros de compilação.

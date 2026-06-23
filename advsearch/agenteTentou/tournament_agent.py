@@ -4,14 +4,11 @@ from typing import Tuple
 from ..othello.gamestate import GameState
 from ..othello.board import Board
 from .minimax import minimax_move
+from .othello_minimax_custom import evaluate_custom
 
-
-def make_move(state) -> Tuple[int, int]:
-    if state.game_name == 'Othello':
-        return othello_iterative_deepening(state, time_limit=4.5)
-    else:
-        from .tttm_minimax import make_move as tttm_make_move
-        return tttm_make_move(state)
+def make_move(state):
+    # com -1, o algoritmo vai usar o Aprofundamento Iterativo com limite de 4.7 segundos
+    return minimax_move(state, -1, evaluate_custom)
 
 
 def othello_iterative_deepening(state, time_limit=4.5):
