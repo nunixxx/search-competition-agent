@@ -138,6 +138,6 @@ Quando restam **12 ou menos espaços vazios no tabuleiro (`n_empty <= 12`)**, o 
 
 ## Uso de IA
 
-Usei o Gemini para me dar um repertório teórico do que a literatura diz sobre heurísticas e adaptei para incluir minhas percepções do jogo.
+Usamos o Gemini para dar um repertório teórico do que a literatura diz sobre heurísticas e adaptmos para incluir nossas percepções do jogo.
 
 Além disso, usamos para ajudar a debugar alguns poucos erros de compilação.
