@@ -7,9 +7,7 @@ from .minimax import minimax_move
 from .othello_minimax_custom import evaluate_custom
 
 def make_move(state):
-    # com -1, o algoritmo vai usar o Aprofundamento Iterativo com limite de 4.7 segundos
-    return minimax_move(state, -1, evaluate_custom)
-
+    return othello_iterative_deepening(state, time_limit=4.5)
 
 def othello_iterative_deepening(state, time_limit=4.5):
     legal_moves = list(state.legal_moves())

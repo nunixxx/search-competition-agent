@@ -55,15 +55,6 @@ def evaluate_mask(state, player:str) -> float:
     :param player: player to evaluate the state for (B or W)
     """
 
-    if state.is_terminal():
-        winner = state.winner()
-        if winner == player:
-            return 10000.0
-        elif winner is None:
-            return 0.0
-        else:
-            return -10000.0
-
     opponent = Board.opponent(player)
     score = 0.0
 
